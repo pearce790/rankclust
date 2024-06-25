@@ -1,3 +1,23 @@
+#' Partition sampling in Bayesian Rank-Clustered BTL models (internal use only)
+#'
+#' This function implements a reversible jump MCMC procedure for updating the parameter partition in Bayesian Rank-Clustered BTL models. For internal use only.
+#'
+#' @param Pi A matrix of rankings, such that the (i,j) entry is the index of the jth-most preferred object according to judge i. If \code{groupwise=TRUE}, then the index corresponds to the jth-most preferred object among those in row i; if \code{groupwise=FALSE}, it is assumd that all unranked objects (if any) are less preferred than those which are ranked.
+#' @param I A numeric indicating the number of rows in Pi
+#' @param J A numeric indicating the total number of objects being compared.
+#' @param nu A vector indicating current values for nu in the Gibbs sampler.
+#' @param g A vector indicating current values for g in the Gibbs sampler.
+#' @param K A vector indicating current values for K in the Gibbs sampler.
+#' @param a_gamma A numeric for the first hyperparameter (shape) in a Gamma prior on each worth parameter.
+#' @param b_gamma A numeric for the second hyperparameter (rate) in a Gamma prior on each worth parameter.
+#' @param logprior_partition A J-vector indicating the log unnormalized probability for each possible partition, based on its number of non-empty clusters.
+#' @param b_g The probability of "birth"ing a new partition cluster, if possible.
+#' @param d_g The probability of "death"ing an existing partition cluster, if possible.
+#' @param groupwise A boolean to indicate whether the observed rankings are complete/partial rankings (\code{FALSE}; default) or groupwise comparisons (\code{TRUE}).
+#'
+#' @return A list containing updated values for g, nu, and K.
+#'
+#' @export
 sample_partition <- function(Pi,I,J,nu,g,K,a_gamma,b_gamma,logprior_partition,b_g=0.5,d_g=0.5,groupwise=FALSE){
   S_g <- unlist(lapply(1:K,function(k){sum(g==k)}))
   if(rbinom(1,1,b_g)==1){

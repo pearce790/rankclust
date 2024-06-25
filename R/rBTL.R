@@ -1,3 +1,17 @@
+#' Random data generation from standard BTL models
+#'
+#' This function randomly draws data from a Bradley-Terry-Luce (BTL) model with object-specific worth parameters, \code{omega}. Currently, only complete or partial rankings may be drawn, although those may be subsetted to simulate groupwise comparison data as a consequence of Luce's Axiom of Choice.
+#'
+#' @param I A numeric indicating the number of observations to draw.
+#' @param omega A vector of non-negative object worth parameters.
+#' @param R A numeric indicating the length of each ranking. Default to \code{NULL}, indicating to draw complete rankings.
+#'
+#' @return A \code{I}x\code{R} matrix of rankings.
+#'
+#' @examples
+#' set.seed(1)
+#' rBTL(I=5,omega=c(10,5,1),R=3)
+#' @export
 rBTL <- function(I,omega,R=NULL){
 
   if((I %% 1)!=0 | I<1){stop("I must be a positive integer.")}
