@@ -1,0 +1,120 @@
+---
+title: "rankclust Tutorial"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{rankclust Tutorial}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+In this tutorial, we demonstrate the key functionality of the `rankclust` package on simulated data. The tutorial includes code for random data generation, density calculation, and fitting of Bayesian Bradley-Terry-Luce (BTL) models and Rank-Clustered BTL (RCBTL) models. We begin by loading the packages necessary for these tasks.
+
+```{r setup}
+library(rankclust)
+library(tidyverse)
+library(reshape2)
+```
+
+## Random Data Generation
+
+We first generate samples from a BTL model in which some objects have equal worth parameters (i.e., are "rank-clustered"). Specifically, we will draw observations from $I=500$ judges who each assess $J=8$ objects. The true, underlying parameter worth values are 
+$$\omega = \big(1 \ 2 \ 4 \ 4 \ 4 \ 16 \ 16 \ 32 \big)$$
+This means that there are 5 rank-clusters: 3 singletons, a pair, and a triple.
+
+```{r}
+set.seed(1)
+Pi <- rBTL(I=500,omega=c(1,2,4,4,4,16,16,32))
+```
+
+Let's visualize our observed rankings, $\Pi$:
+
+```{r}
+ggplot(melt(Pi),aes(x=value,fill=factor(Var2)))+
+  geom_bar(color="black")+theme_bw()+
+  scale_fill_manual(values=c("#F7FCF5","#E5F5E0","#A1D99B","#74C476","#238B45","#006D2C","#00441B","black"))+
+  scale_x_continuous(breaks=1:10)+
+  labs(x="Object",fill="Rank Place",title="Observed Ranks by Object")
+```
+
+We can see in the above stacked barchart that object 8 receives the most first-place votes, while objects 6 and 7 receive fewer first-place places, but similar such votes between the two of them. Knowing the true worth parameters, $\omega$, this is unsurprising since objects 6 and 7 are rank-clustered and jointly have the second-highest object-level worth parameter. However, it's hard to rank objects further down in the ranking, or make sense of potentially-complex relationships in these rankings.
+
+## Model-Fitting: Standard BTL Model
+
+Let's now fit a standard BTL model to the observed rankings. We place an independent Gamma($a_\gamma=3,b_\gamma=2$) prior on each worth parameter, $\omega_j$. Note that we are running 2 chains of 1000 iterations, remove the first half as burn-in, and perform no thinning. All posterior samples of $\omega$ are normalized post-hoc to sum to 1 (by default; can be changed using the `normalize_omega` argument).
+
+```{r}
+resBTL <- mcmc_BTL(Pi=Pi,J=8,a_gamma=3,b_gamma=2,num_iters=1000,chains=2,burn_prop = 0.5, thin = 1,seed = 1)
+head(resBTL)
+```
+
+Next, we'll view trace plots and posterior violin plots to assess convergence and mixing:
+
+```{r}
+p1_btl <- ggplot(melt(resBTL,id.vars=c(1,2)),aes(x=iteration,y=value,color=chain))+
+  geom_line()+facet_wrap(~variable,nrow=3)+theme_bw()+theme(legend.position = c(.85,.12))+
+  labs(x="Iteration",y="Value",title="Trace Plots: Standard BTL")
+p2_btl <- ggplot(melt(resBTL,id.vars=c(1,2)),aes(x=variable,y=value))+
+  geom_violin()+theme_bw()+
+  labs(x="Parameter",y="Posterior",title="Posterior Violin Plots: Standard BTL")
+p1_btl
+p2_btl
+```
+
+We can start to see some patterns emerging: Object 8 is most preferred, followed by objects 6 and 7 (similarly preferred between them), followed by objects 3, 4, and 5 (similarly preferred among them), followed by object 2, and followed in last by object 1. These similarities among groups, however, are uncertain and not model-specified. This leads us to the Rank-Clustered BTL, which is able to specifically infer rank-clusters of objects based on the observed ranking data.
+
+## Model-Fitting: Rank-Clustered BTL Model
+
+We now fit a Rank-Clustered BTL model to the observed rankings. As specified by the model, we place a PSSF prior with hyperparameters $a_\gamma=3$, $b_\gamma=2$, and $\lambda=5$ to be vague. Note that we are running 2 chains of `num_iters`=1000 outer iterations and `nu_reps`=2 inner iterations for a total of 2000 iterations per chain, but remove the first half as burn-in and perform no thinning. All posterior samples of $\omega$ are normalized post-hoc to sum to 1 (by default; can be changed using the `normalize_omega` argument).
+
+```{r}
+nu0 <- apply(resBTL[,-c(1,2)],2,mean) # initialize at posterior mean of standard model
+resRCBTL <- mcmc_RCBTL(Pi=Pi,J=8,a_gamma=3,b_gamma=2,lambda=5,nu0=nu0,
+                       num_iters=500,nu_reps=2,chains=2,burn_prop=0.5,thin=1,seed=1)
+head(resRCBTL)
+```
+Next, we'll view trace plots and posterior violin plots to assess convergence and mixing:
+
+```{r}
+p1_rcbtl <- ggplot(melt(resRCBTL[,1:11],id.vars=c(1,2,3)),aes(x=iteration,y=value,color=chain))+
+  geom_line()+facet_wrap(~variable,nrow=5)+theme_bw()+
+  labs(x="Iteration",y="Value",title="Trace Plots: Rank-Clustered BTL")
+p2_rcbtl <- ggplot(melt(resRCBTL[,1:11],id.vars=c(1,2,3)),aes(x=variable,y=value))+
+  geom_violin()+theme_bw()+
+  labs(x="Parameter",y="Posterior",title="Posterior Violin Plots: Rank-Clustered BTL")
+p1_rcbtl
+p2_rcbtl
+```
+
+Just as before, we can see that Object 8 is most preferred, followed by objects 6 and 7 (similarly preferred between them), followed by objects 3, 4, and 5 (similarly preferred among them), followed by object 2, and followed in last by object 1. How "similar" are these groups objects preferred? We can see this by examining a posterior clustering matrix:
+
+```{r}
+order_omega <- order(apply(resRCBTL[,4:11],2,mean))
+pairs <- expand.grid(i=1:8,j=1:8,prob=0)
+pairs <- pairs[pairs$i < pairs$j,]
+pairs$prob <- apply(pairs,1,function(pair){
+  i <- pair[1]; j <- pair[2]
+  mean(apply(resRCBTL[,paste0("G",c(i,j))],1,function(x){x[1]==x[2]}))
+})
+pairs2 <- pairs[,c(2,1,3)]; names(pairs2) <- c("i","j","prob")
+pairs3 <- data.frame(i=1:8,j=1:8,prob=1)
+pairs <- rbind(pairs,pairs2,pairs3)
+
+ggplot(pairs,aes(x=factor(i,levels=rev(order_omega)),
+                 y=factor(j,levels=order_omega),fill=prob))+
+  geom_tile()+scale_fill_gradient(low="white",high="black",breaks=c(0,.5,1))+
+  theme_bw()+labs(x=element_blank(),y=element_blank(),fill="Probability",
+                  title="Rank-Clustering Posterior Probabilities")+
+  theme(legend.position = c(.8,.9),legend.direction = "horizontal",
+        axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+```
+
+Based on the above figure, we see that Objects 6 and 7 are rank-clustered with high posterior probability, as are objects 3, 4, and 5. Objects 8, 2, and 1 are in singleton clusters. This result precisely aligns with the true rank-clustering of objects based on the $\omega$ that generated the rankings.
+
+
