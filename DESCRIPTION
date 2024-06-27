@@ -16,7 +16,8 @@ Imports:
     utils,
     magrittr,
     matrixStats,
-    dplyr
+    dplyr,
+    devtools
 Suggests: 
     tidyverse,
     gridExtra,
