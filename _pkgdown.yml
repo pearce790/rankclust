@@ -1,4 +1,48 @@
 url: https://pearce790.github.io/rankclust/
 template:
-  bootstrap: 5
+  params:
+    bootswatch: flatly
+navbar:
+  structure:
+    left:
+    - home
+    - tutorial
+    - reference
+    right: github
+  components:
+    home:
+      text: Overview
+      href: articles/overview.html
+    tutorial:
+      text: Tutorial
+      href: articles/tutorial.html
+    reference:
+      text: Reference
+      href: reference/index.html
+    articles:
+      text: ~
+      menu: ~
+reference:
+- title: Density and Random Data Generation functions
+  desc: Functions that allow for calculating the density of ordinal comparison data
+    and random sampling of BTL and Rank-Clustered BTL data.
+  contents:
+  - dBTL
+  - rBTL
+  - rRCBTL
+- title: Model Estimation Functions
+  desc: Functions that allow for estimation of Bayesian BTL or Rank-Clustered BTL
+    models.
+  contents:
+  - mcmc_BTL
+  - mcmc_RCBTL
+- title: Helper Functions
+  desc: Functions used during model-fitting that are not needed by the user, but are
+    provided for completeness and reproducibility.
+  contents:
+  - fit_BTL
+  - fit_RCBTL
+  - obtain_constants
+  - sample_nu
+  - sample_partition
 

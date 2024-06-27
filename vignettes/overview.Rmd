@@ -1,0 +1,38 @@
+---
+title: "rankclust: Fit a Bayesian, Rank-Clustered Bradley-Terry-Luce Model to Ordinal Comparison Data"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{overview}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  rmarkdown.html_vignette.check_title = FALSE
+)
+```
+
+This package implements the Rank-Clustered Bradley-Terry-Luce model proposed by Pearce and Erosheva (2024+). More specifically, it fits a Bayesian model for ordinal comparison data of many different types (such as complete or partial rankings, pairwise comparisons, etc.) such that some objects being ranked may be "rank-clustered", i.e., assigned equal rank in the overall ranking.
+
+For more details on how to use this package, see the [tutorial](https://pearce790.github.io/rankclust/articles/tutorial.html). 
+
+The package is currently in beta testing. You may install the package from Github using the following code:
+```{r, eval=FALSE}
+## Beta (Github) version
+# install.packages("devtools") # uncomment if you haven't installed 'devtools' before
+devtools::install_github("pearce790/rankclust")
+```
+
+After installation, load the package with the following code:
+```{r echo=FALSE,results='hide',message=FALSE,warning=FALSE}
+devtools::install_github("pearce790/rankrate")
+```
+```{r}
+library(rankclust)
+```
+
+# Funding
+
+This project was supported by the National Science Foundation under Grant No. 2019901.
