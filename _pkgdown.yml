@@ -16,9 +16,6 @@ navbar:
     tutorial:
       text: Tutorial
       href: articles/tutorial.html
-    reference:
-      text: Reference
-      href: reference/index.html
     articles:
       text: ~
       menu: ~
