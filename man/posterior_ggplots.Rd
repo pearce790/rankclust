@@ -19,6 +19,6 @@ This function creates side-by-side violin plots for omega (object-specific worth
 }
 \examples{
 Pi <- rBTL(I=30,omega=c(4^2,4^2,4^1,4^1,4^0))
-mcmc <- mcmc_BTL(Pi=Pi,J=5,a_gamma=5,b_gamma=3,lambda=2,num_iters=200,nu_reps=1,chains=2,seed=1)
+mcmc <- mcmc_BTL(Pi=Pi,J=5,a_gamma=5,b_gamma=3,num_iters=200,chains=2,seed=1)
 posterior_ggplots(mcmc,object_names=paste0("Object ",1:5))
 }

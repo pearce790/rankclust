@@ -1,1 +1,1 @@
-utils::globalVariables(c("chain","iteration","K","i","j","prob","value"))
+utils::globalVariables(c("chain","iteration","K","i","j","prob","variable","value"))
