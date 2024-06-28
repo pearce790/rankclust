@@ -19,6 +19,9 @@
     <loc>https://pearce790.github.io/rankclust/index.html</loc>
   </url>
   <url>
+    <loc>https://pearce790.github.io/rankclust/reference/cluster_ggplots.html</loc>
+  </url>
+  <url>
     <loc>https://pearce790.github.io/rankclust/reference/dBTL.html</loc>
   </url>
   <url>
@@ -40,6 +43,9 @@
     <loc>https://pearce790.github.io/rankclust/reference/obtain_constants.html</loc>
   </url>
   <url>
+    <loc>https://pearce790.github.io/rankclust/reference/posterior_ggplots.html</loc>
+  </url>
+  <url>
     <loc>https://pearce790.github.io/rankclust/reference/rBTL.html</loc>
   </url>
   <url>
@@ -50,5 +56,8 @@
   </url>
   <url>
     <loc>https://pearce790.github.io/rankclust/reference/sample_partition.html</loc>
+  </url>
+  <url>
+    <loc>https://pearce790.github.io/rankclust/reference/trace_ggplots.html</loc>
   </url>
 </urlset>

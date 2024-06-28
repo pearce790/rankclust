@@ -86,33 +86,47 @@ models. We begin by loading the packages necessary for these tasks.</p>
 </h2>
 <p>We first generate samples from a BTL model in which some objects have
 equal worth parameters (i.e., are “rank-clustered”). Specifically, we
-will draw observations from <span class="math inline">\(I=500\)</span>
-judges who each assess <span class="math inline">\(J=8\)</span> objects.
-The true, underlying parameter worth values are <span class="math display">\[\omega = \big(1 \ 2 \ 4 \ 4 \ 4 \ 16 \ 16 \ 32
-\big)\]</span> This means that there are 5 rank-clusters: 3 singletons,
-a pair, and a triple.</p>
+will draw observations from <span class="math inline">\(I=200\)</span>
+judges who each assess <span class="math inline">\(J=6\)</span> objects.
+The true, underlying parameter worth values are <span class="math display">\[\omega =
+\big(\frac{64}{105},\frac{16}{105},\frac{16}{105},\frac{4}{105},\frac{4}{105},\frac{1}{105}\big)\]</span>
+We have chosen these values to sum to 1, but they need not! Our choice
+of <span class="math inline">\(\omega\)</span> means that there are 4
+rank-clusters: 2 singletons and 2 pairs. The true overall ordering of
+objects would be <span class="math inline">\(1\prec\{2,3\}\prec\{4,5\}\prec6\)</span>.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
-<span><span class="va">Pi</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rBTL.html">rBTL</a></span><span class="op">(</span>I<span class="op">=</span><span class="fl">500</span>,omega<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span>,<span class="fl">4</span>,<span class="fl">4</span>,<span class="fl">4</span>,<span class="fl">16</span>,<span class="fl">16</span>,<span class="fl">32</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">Pi</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rBTL.html">rBTL</a></span><span class="op">(</span>I<span class="op">=</span><span class="fl">200</span>,omega<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">64</span><span class="op">/</span><span class="fl">105</span>,<span class="fl">16</span><span class="op">/</span><span class="fl">105</span>,<span class="fl">16</span><span class="op">/</span><span class="fl">105</span>,<span class="fl">4</span><span class="op">/</span><span class="fl">105</span>,<span class="fl">4</span><span class="op">/</span><span class="fl">105</span>,<span class="fl">1</span><span class="op">/</span><span class="fl">105</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">Pi</span>,<span class="fl">4</span><span class="op">)</span></span>
+<span><span class="co">#&gt;      [,1] [,2] [,3] [,4] [,5] [,6]</span></span>
+<span><span class="co">#&gt; [1,]    1    3    2    6    5    4</span></span>
+<span><span class="co">#&gt; [2,]    5    3    1    2    4    6</span></span>
+<span><span class="co">#&gt; [3,]    3    1    5    2    4    6</span></span>
+<span><span class="co">#&gt; [4,]    1    2    4    3    5    6</span></span></code></pre></div>
+<p>We can see from the above output that the second judge placed object
+5 in first place, object 3 in second place, object 1 in third place,
+object 2 in fourth place, object 4 in fifth place, and object 6 in sixth
+place.</p>
 <p>Let’s visualize our observed rankings, <span class="math inline">\(\Pi\)</span>:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/reshape2/man/melt.html" class="external-link">melt</a></span><span class="op">(</span><span class="va">Pi</span><span class="op">)</span>,<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">value</span>,fill<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">Var2</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html" class="external-link">geom_bar</a></span><span class="op">(</span>color<span class="op">=</span><span class="st">"black"</span><span class="op">)</span><span class="op">+</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span><span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_fill_manual</a></span><span class="op">(</span>values<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#F7FCF5"</span>,<span class="st">"#E5F5E0"</span>,<span class="st">"#A1D99B"</span>,<span class="st">"#74C476"</span>,<span class="st">"#238B45"</span>,<span class="st">"#006D2C"</span>,<span class="st">"#00441B"</span>,<span class="st">"black"</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_fill_manual</a></span><span class="op">(</span>values<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#F7FCF5"</span>,<span class="st">"#E5F5E0"</span>,<span class="st">"#A1D99B"</span>,<span class="st">"#74C476"</span>,<span class="st">"#238B45"</span>,<span class="st">"#006D2C"</span>,<span class="st">"#00441B"</span>,<span class="st">"gray15"</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_x_continuous</a></span><span class="op">(</span>breaks<span class="op">=</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span><span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>x<span class="op">=</span><span class="st">"Object"</span>,fill<span class="op">=</span><span class="st">"Rank Place"</span>,title<span class="op">=</span><span class="st">"Observed Ranks by Object"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="tutorial_files/figure-html/unnamed-chunk-3-1.png" width="700"></p>
-<p>We can see in the above stacked barchart that object 8 receives the
-most first-place votes, while objects 6 and 7 receive fewer first-place
-places, but similar such votes between the two of them. Knowing the true
-worth parameters, <span class="math inline">\(\omega\)</span>, this is
-unsurprising since objects 6 and 7 are rank-clustered and jointly have
-the second-highest object-level worth parameter. However, it’s hard to
-rank objects further down in the ranking, or make sense of
-potentially-complex relationships in these rankings.</p>
+<p>We can see in the above stacked barchart that object 1 receives the
+most first-place votes, while objects 2 and 3 receive fewer first-place
+places, but similar numbers of first-place votes between the two of
+them. Knowing the true worth parameters, <span class="math inline">\(\omega\)</span>, this is unsurprising since
+objects 2 and 3 are rank-clustered and jointly have the second-highest
+object-level worth parameter. However, it can be hard to understand
+potentially complex rank orderings based on marginal plots. Thus, we’ll
+use statistical models to better estimate the relative preferences of
+this (simulated) population.</p>
 </div>
 <div class="section level2">
-<h2 id="model-fitting-standard-btl-model">Model-Fitting: Standard BTL Model<a class="anchor" aria-label="anchor" href="#model-fitting-standard-btl-model"></a>
+<h2 id="model-estimation-and-assessment-standard-btl">Model Estimation and Assessment: Standard BTL<a class="anchor" aria-label="anchor" href="#model-estimation-and-assessment-standard-btl"></a>
 </h2>
 <p>Let’s now fit a standard BTL model to the observed rankings. We place
 an independent Gamma(<span class="math inline">\(a_\gamma=3,b_\gamma=2\)</span>) prior on each
@@ -122,139 +136,110 @@ as burn-in, and perform no thinning. All posterior samples of <span class="math 
 1 (by default; can be changed using the <code>normalize_omega</code>
 argument).</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">resBTL</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mcmc_BTL.html">mcmc_BTL</a></span><span class="op">(</span>Pi<span class="op">=</span><span class="va">Pi</span>,J<span class="op">=</span><span class="fl">8</span>,a_gamma<span class="op">=</span><span class="fl">3</span>,b_gamma<span class="op">=</span><span class="fl">2</span>,num_iters<span class="op">=</span><span class="fl">1000</span>,chains<span class="op">=</span><span class="fl">2</span>,burn_prop <span class="op">=</span> <span class="fl">0.5</span>, thin <span class="op">=</span> <span class="fl">1</span>,seed <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">resBTL</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mcmc_BTL.html">mcmc_BTL</a></span><span class="op">(</span>Pi<span class="op">=</span><span class="va">Pi</span>,J<span class="op">=</span><span class="fl">6</span>,a_gamma<span class="op">=</span><span class="fl">3</span>,b_gamma<span class="op">=</span><span class="fl">2</span>,num_iters<span class="op">=</span><span class="fl">1000</span>,chains<span class="op">=</span><span class="fl">2</span>,burn_prop <span class="op">=</span> <span class="fl">0.5</span>, thin <span class="op">=</span> <span class="fl">1</span>,seed <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "Estimating chain 1 of 2."</span></span>
 <span><span class="co">#&gt; [1] "Estimating chain 2 of 2."</span></span></code></pre></div>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">resBTL</span><span class="op">)</span></span>
-<span><span class="co">#&gt;   chain iteration     omega1     omega2     omega3     omega4     omega5</span></span>
-<span><span class="co">#&gt; 1     1       501 0.01616850 0.02830830 0.05553037 0.04982330 0.05716712</span></span>
-<span><span class="co">#&gt; 2     1       502 0.01409034 0.02911296 0.04949263 0.04528831 0.05442372</span></span>
-<span><span class="co">#&gt; 3     1       503 0.01291203 0.02761039 0.04514252 0.04939879 0.04864755</span></span>
-<span><span class="co">#&gt; 4     1       504 0.01413523 0.02699455 0.05207117 0.05196366 0.04536763</span></span>
-<span><span class="co">#&gt; 5     1       505 0.01360209 0.02692282 0.04915580 0.05483144 0.05196633</span></span>
-<span><span class="co">#&gt; 6     1       506 0.01405869 0.02471245 0.05103484 0.05005285 0.05006881</span></span>
-<span><span class="co">#&gt;      omega6    omega7    omega8</span></span>
-<span><span class="co">#&gt; 1 0.1720380 0.1836909 0.4372736</span></span>
-<span><span class="co">#&gt; 2 0.1951772 0.1825139 0.4299009</span></span>
-<span><span class="co">#&gt; 3 0.1958714 0.1828112 0.4376061</span></span>
-<span><span class="co">#&gt; 4 0.1825656 0.1965223 0.4303799</span></span>
-<span><span class="co">#&gt; 5 0.1828447 0.1892798 0.4313970</span></span>
-<span><span class="co">#&gt; 6 0.1949887 0.1879992 0.4270844</span></span></code></pre></div>
-<p>Next, we’ll view trace plots and posterior violin plots to assess
-convergence and mixing:</p>
+<span><span class="co">#&gt;   chain iteration    omega1    omega2    omega3     omega4     omega5</span></span>
+<span><span class="co">#&gt; 1     1       501 0.5866994 0.1491845 0.1651737 0.04387851 0.04585898</span></span>
+<span><span class="co">#&gt; 2     1       502 0.6162836 0.1498351 0.1452380 0.04470279 0.03562536</span></span>
+<span><span class="co">#&gt; 3     1       503 0.6127107 0.1573117 0.1455899 0.03864798 0.03924107</span></span>
+<span><span class="co">#&gt; 4     1       504 0.5711446 0.1701438 0.1702835 0.03932126 0.04257707</span></span>
+<span><span class="co">#&gt; 5     1       505 0.5686603 0.1717451 0.1677084 0.04420377 0.04005833</span></span>
+<span><span class="co">#&gt; 6     1       506 0.5963927 0.1543658 0.1549673 0.04521449 0.04141905</span></span>
+<span><span class="co">#&gt;        omega6</span></span>
+<span><span class="co">#&gt; 1 0.009204954</span></span>
+<span><span class="co">#&gt; 2 0.008315110</span></span>
+<span><span class="co">#&gt; 3 0.006498562</span></span>
+<span><span class="co">#&gt; 4 0.006529828</span></span>
+<span><span class="co">#&gt; 5 0.007624145</span></span>
+<span><span class="co">#&gt; 6 0.007640620</span></span></code></pre></div>
+<p>Next, we’ll view trace plots created by the package’s
+<code>trace_ggplots</code> function (to assess convergence and mixing)
+and posterior violin plots of the object-specific worth parameters
+created by the package’s <code>posterior_ggplots</code> function.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">p1_btl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/reshape2/man/melt.html" class="external-link">melt</a></span><span class="op">(</span><span class="va">resBTL</span>,id.vars<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span>,<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">iteration</span>,y<span class="op">=</span><span class="va">value</span>,color<span class="op">=</span><span class="va">chain</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span><span class="op">)</span><span class="op">+</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">variable</span>,nrow<span class="op">=</span><span class="fl">3</span><span class="op">)</span><span class="op">+</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span><span class="op">+</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.85</span>,<span class="fl">.12</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>x<span class="op">=</span><span class="st">"Iteration"</span>,y<span class="op">=</span><span class="st">"Value"</span>,title<span class="op">=</span><span class="st">"Trace Plots: Standard BTL"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning: A numeric `legend.position` argument in `theme()` was deprecated in ggplot2</span></span>
-<span><span class="co">#&gt; 3.5.0.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Please use the `legend.position.inside` argument of `theme()` instead.</span></span>
-<span><span class="co">#&gt; <span style="color: #555555;">This warning is displayed once every 8 hours.</span></span></span>
-<span><span class="co">#&gt; <span style="color: #555555;">Call `lifecycle::last_lifecycle_warnings()` to see where this warning was</span></span></span>
-<span><span class="co">#&gt; <span style="color: #555555;">generated.</span></span></span></code></pre></div>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">p2_btl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/reshape2/man/melt.html" class="external-link">melt</a></span><span class="op">(</span><span class="va">resBTL</span>,id.vars<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span>,<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">variable</span>,y<span class="op">=</span><span class="va">value</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_violin.html" class="external-link">geom_violin</a></span><span class="op">(</span><span class="op">)</span><span class="op">+</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span><span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>x<span class="op">=</span><span class="st">"Parameter"</span>,y<span class="op">=</span><span class="st">"Posterior"</span>,title<span class="op">=</span><span class="st">"Posterior Violin Plots: Standard BTL"</span><span class="op">)</span></span>
-<span><span class="va">p1_btl</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">traceplots</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/trace_ggplots.html">trace_ggplots</a></span><span class="op">(</span>mcmc <span class="op">=</span> <span class="va">resBTL</span>,object_names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"Ojbect "</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">6</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">traceplots</span><span class="op">$</span><span class="va">traceOmega</span><span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>title<span class="op">=</span><span class="st">"Trace Plots: Standard BTL"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="tutorial_files/figure-html/unnamed-chunk-5-1.png" width="700"></p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">p2_btl</span></span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/posterior_ggplots.html">posterior_ggplots</a></span><span class="op">(</span>mcmc <span class="op">=</span> <span class="va">resBTL</span>,object_names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"Ojbect "</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">6</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>title<span class="op">=</span><span class="st">"Posterior Violin Plots: Standard BTL"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="tutorial_files/figure-html/unnamed-chunk-5-2.png" width="700"></p>
-<p>We can start to see some patterns emerging: Object 8 is most
-preferred, followed by objects 6 and 7 (similarly preferred between
-them), followed by objects 3, 4, and 5 (similarly preferred among them),
-followed by object 2, and followed in last by object 1. These
-similarities among groups, however, are uncertain and not
-model-specified. This leads us to the Rank-Clustered BTL, which is able
-to specifically infer rank-clusters of objects based on the observed
-ranking data.</p>
+<p>We can start to see some patterns emerging: Object 1 is most
+preferred, followed by objects 2 and 3 (similarly preferred between
+them), followed by objects 4 and 5 (similarly preferred between them),
+followed by object 6 in last place. These similarities among groups,
+however, are uncertain and not model-specified. This leads us to the
+Rank-Clustered BTL, which is able to specifically infer rank-clusters of
+objects based on the observed ranking data.</p>
 </div>
 <div class="section level2">
-<h2 id="model-fitting-rank-clustered-btl-model">Model-Fitting: Rank-Clustered BTL Model<a class="anchor" aria-label="anchor" href="#model-fitting-rank-clustered-btl-model"></a>
+<h2 id="model-estimation-and-assessment-rank-clustered-btl">Model Estimation and Assessment: Rank-Clustered BTL<a class="anchor" aria-label="anchor" href="#model-estimation-and-assessment-rank-clustered-btl"></a>
 </h2>
 <p>We now fit a Rank-Clustered BTL model to the observed rankings. As
-specified by the model, we place a PSSF prior with hyperparameters <span class="math inline">\(a_\gamma=3\)</span>, <span class="math inline">\(b_\gamma=2\)</span>, and <span class="math inline">\(\lambda=5\)</span> to be vague. Note that we are
-running 2 chains of <code>num_iters</code>=1000 outer iterations and
-<code>nu_reps</code>=2 inner iterations for a total of 2000 iterations
+specified by the model, we place a PSSF prior with hyperparameters <span class="math inline">\(a_\gamma=3\)</span>, <span class="math inline">\(b_\gamma=2\)</span>, and <span class="math inline">\(\lambda=3\)</span> to be vague. Note that we are
+running 2 chains of <code>num_iters</code>=500 outer iterations and
+<code>nu_reps</code>=2 inner iterations for a total of 1000 iterations
 per chain, but remove the first half as burn-in and perform no thinning.
 All posterior samples of <span class="math inline">\(\omega\)</span> are
 normalized post-hoc to sum to 1 (by default; can be changed using the
 <code>normalize_omega</code> argument).</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">nu0</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">resBTL</span><span class="op">[</span>,<span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span><span class="op">]</span>,<span class="fl">2</span>,<span class="va">mean</span><span class="op">)</span> <span class="co"># initialize at posterior mean of standard model</span></span>
-<span><span class="va">resRCBTL</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mcmc_RCBTL.html">mcmc_RCBTL</a></span><span class="op">(</span>Pi<span class="op">=</span><span class="va">Pi</span>,J<span class="op">=</span><span class="fl">8</span>,a_gamma<span class="op">=</span><span class="fl">3</span>,b_gamma<span class="op">=</span><span class="fl">2</span>,lambda<span class="op">=</span><span class="fl">5</span>,nu0<span class="op">=</span><span class="va">nu0</span>,</span>
+<span><span class="va">resRCBTL</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mcmc_RCBTL.html">mcmc_RCBTL</a></span><span class="op">(</span>Pi<span class="op">=</span><span class="va">Pi</span>,J<span class="op">=</span><span class="fl">6</span>,a_gamma<span class="op">=</span><span class="fl">3</span>,b_gamma<span class="op">=</span><span class="fl">2</span>,lambda<span class="op">=</span><span class="fl">3</span>,nu0<span class="op">=</span><span class="va">nu0</span>,</span>
 <span>                       num_iters<span class="op">=</span><span class="fl">500</span>,nu_reps<span class="op">=</span><span class="fl">2</span>,chains<span class="op">=</span><span class="fl">2</span>,burn_prop<span class="op">=</span><span class="fl">0.5</span>,thin<span class="op">=</span><span class="fl">1</span>,seed<span class="op">=</span><span class="fl">1</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "Estimating chain 1 of 2."</span></span>
 <span><span class="co">#&gt; [1] "Estimating chain 2 of 2."</span></span></code></pre></div>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">resRCBTL</span><span class="op">)</span></span>
-<span><span class="co">#&gt;   chain iteration K     omega1     omega2     omega3     omega4     omega5</span></span>
-<span><span class="co">#&gt; 1     1       501 5 0.01197153 0.02372197 0.04630879 0.04630879 0.04630879</span></span>
-<span><span class="co">#&gt; 2     1       502 5 0.01110262 0.02362131 0.04427417 0.04427417 0.04427417</span></span>
-<span><span class="co">#&gt; 3     1       503 5 0.01154979 0.02291681 0.04760864 0.04760864 0.04760864</span></span>
-<span><span class="co">#&gt; 4     1       504 5 0.01326568 0.02566073 0.04965306 0.04965306 0.04965306</span></span>
-<span><span class="co">#&gt; 5     1       505 5 0.01310281 0.02514086 0.04742993 0.04742993 0.04742993</span></span>
-<span><span class="co">#&gt; 6     1       506 5 0.01383825 0.02851416 0.04824661 0.04824661 0.04824661</span></span>
-<span><span class="co">#&gt;      omega6    omega7    omega8        nu1       nu2       nu3      nu4</span></span>
-<span><span class="co">#&gt; 1 0.2015069 0.2015069 0.4223663 0.07050187 0.1397017 0.2727183 1.186699</span></span>
-<span><span class="co">#&gt; 2 0.2004170 0.2004170 0.4316195 0.06645674 0.1413896 0.2650109 1.199632</span></span>
-<span><span class="co">#&gt; 3 0.1947861 0.1947861 0.4331353 0.06866033 0.1362341 0.2830203 1.157950</span></span>
-<span><span class="co">#&gt; 4 0.1931995 0.1931995 0.4257154 0.07509461 0.1452607 0.2810769 1.093667</span></span>
-<span><span class="co">#&gt; 5 0.1803830 0.1803830 0.4587005 0.07589345 0.1456197 0.2747214 1.044806</span></span>
-<span><span class="co">#&gt; 6 0.1941247 0.1941247 0.4246583 0.07593182 0.1564599 0.2647338 1.065181</span></span>
-<span><span class="co">#&gt;        nu5 nu6 nu7 nu8 G1 G2 G3 G4 G5 G6 G7 G8</span></span>
-<span><span class="co">#&gt; 1 2.487369  NA  NA  NA  1  2  3  3  3  4  4  5</span></span>
-<span><span class="co">#&gt; 2 2.583536  NA  NA  NA  1  2  3  3  3  4  4  5</span></span>
-<span><span class="co">#&gt; 3 2.574870  NA  NA  NA  1  2  3  3  3  4  4  5</span></span>
-<span><span class="co">#&gt; 4 2.409897  NA  NA  NA  1  2  3  3  3  4  4  5</span></span>
-<span><span class="co">#&gt; 5 2.656863  NA  NA  NA  1  2  3  3  3  4  4  5</span></span>
-<span><span class="co">#&gt; 6 2.330141  NA  NA  NA  1  2  3  3  3  4  4  5</span></span></code></pre></div>
-<p>Next, we’ll view trace plots and posterior violin plots to assess
-convergence and mixing:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">p1_rcbtl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/reshape2/man/melt.html" class="external-link">melt</a></span><span class="op">(</span><span class="va">resRCBTL</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">11</span><span class="op">]</span>,id.vars<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span>,<span class="fl">3</span><span class="op">)</span><span class="op">)</span>,<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">iteration</span>,y<span class="op">=</span><span class="va">value</span>,color<span class="op">=</span><span class="va">chain</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span><span class="op">)</span><span class="op">+</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">variable</span>,nrow<span class="op">=</span><span class="fl">5</span><span class="op">)</span><span class="op">+</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span><span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>x<span class="op">=</span><span class="st">"Iteration"</span>,y<span class="op">=</span><span class="st">"Value"</span>,title<span class="op">=</span><span class="st">"Trace Plots: Rank-Clustered BTL"</span><span class="op">)</span></span>
-<span><span class="va">p2_rcbtl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/reshape2/man/melt.html" class="external-link">melt</a></span><span class="op">(</span><span class="va">resRCBTL</span><span class="op">[</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">11</span><span class="op">]</span>,id.vars<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span>,<span class="fl">3</span><span class="op">)</span><span class="op">)</span>,<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">variable</span>,y<span class="op">=</span><span class="va">value</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_violin.html" class="external-link">geom_violin</a></span><span class="op">(</span><span class="op">)</span><span class="op">+</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span><span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>x<span class="op">=</span><span class="st">"Parameter"</span>,y<span class="op">=</span><span class="st">"Posterior"</span>,title<span class="op">=</span><span class="st">"Posterior Violin Plots: Rank-Clustered BTL"</span><span class="op">)</span></span>
-<span><span class="va">p1_rcbtl</span></span></code></pre></div>
+<span><span class="co">#&gt;   chain iteration K    omega1    omega2    omega3     omega4     omega5</span></span>
+<span><span class="co">#&gt; 1     1       501 4 0.5176336 0.1782277 0.1782277 0.05702493 0.05702493</span></span>
+<span><span class="co">#&gt; 2     1       502 4 0.5430463 0.1716468 0.1716468 0.05097095 0.05097095</span></span>
+<span><span class="co">#&gt; 3     1       503 4 0.5481608 0.1744917 0.1744917 0.04646537 0.04646537</span></span>
+<span><span class="co">#&gt; 4     1       504 4 0.5576340 0.1681091 0.1681091 0.04772825 0.04772825</span></span>
+<span><span class="co">#&gt; 5     1       505 4 0.5916405 0.1546080 0.1546080 0.04525227 0.04525227</span></span>
+<span><span class="co">#&gt; 6     1       506 4 0.5723464 0.1630075 0.1630075 0.04662679 0.04662679</span></span>
+<span><span class="co">#&gt;        omega6        nu1       nu2       nu3      nu4 nu5 nu6 G1 G2 G3 G4 G5 G6</span></span>
+<span><span class="co">#&gt; 1 0.011861108 0.06721179 0.3231357 1.0099396 2.933206  NA  NA  4  3  3  2  2  1</span></span>
+<span><span class="co">#&gt; 2 0.011718278 0.07075745 0.3077734 1.0364396 3.279029  NA  NA  4  3  3  2  2  1</span></span>
+<span><span class="co">#&gt; 3 0.009925195 0.06226651 0.2915042 1.0946875 3.438931  NA  NA  4  3  3  2  2  1</span></span>
+<span><span class="co">#&gt; 4 0.010691234 0.06856602 0.3060953 1.0781333 3.576270  NA  NA  4  3  3  2  2  1</span></span>
+<span><span class="co">#&gt; 5 0.008638973 0.05391636 0.2824222 0.9649181 3.692464  NA  NA  4  3  3  2  2  1</span></span>
+<span><span class="co">#&gt; 6 0.008385028 0.04999783 0.2780239 0.9719732 3.412759  NA  NA  4  3  3  2  2  1</span></span></code></pre></div>
+<p>Next, we’ll view trace plots created by the package’s
+<code>trace_ggplots</code> function (to assess convergence and mixing)
+and posterior violin plots of the object-specific worth parameters
+created by the package’s <code>posterior_ggplots</code> function.</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">traceplotsRCBTL</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/trace_ggplots.html">trace_ggplots</a></span><span class="op">(</span>mcmc<span class="op">=</span><span class="va">resRCBTL</span>,object_names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"Ojbect "</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">6</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">traceplotsRCBTL</span><span class="op">$</span><span class="va">traceK</span><span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>title<span class="op">=</span><span class="st">"Trace Plot of K: Rank-Clustered BTL"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="tutorial_files/figure-html/unnamed-chunk-7-1.png" width="700"></p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">p2_rcbtl</span></span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">traceplotsRCBTL</span><span class="op">$</span><span class="va">traceOmega</span><span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>title<span class="op">=</span><span class="st">"Trace Plots of Omega: Standard BTL"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="tutorial_files/figure-html/unnamed-chunk-7-2.png" width="700"></p>
-<p>Just as before, we can see that Object 8 is most preferred, followed
-by objects 6 and 7 (similarly preferred between them), followed by
-objects 3, 4, and 5 (similarly preferred among them), followed by object
-2, and followed in last by object 1. How “similar” are these groups
-objects preferred? We can see this by examining a posterior clustering
-matrix:</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/posterior_ggplots.html">posterior_ggplots</a></span><span class="op">(</span>mcmc <span class="op">=</span> <span class="va">resRCBTL</span>,object_names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"Ojbect "</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">6</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>title<span class="op">=</span><span class="st">"Posterior Violin Plots: Rank-Clustered BTL"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="tutorial_files/figure-html/unnamed-chunk-7-3.png" width="700"></p>
+<p>Just as before, we can see that Object 1 is most preferred, followed
+by objects 2 and 3 (similarly preferred between them), followed by
+objects 4 and 5 (similarly preferred between them), and followed by
+object 6 in last. How “similar” are these groups objects preferred? We
+can see this by examining a posterior clustering matrix, as created by
+the package’s <code>cluster_ggplots</code> function:</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">order_omega</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/order.html" class="external-link">order</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">resRCBTL</span><span class="op">[</span>,<span class="fl">4</span><span class="op">:</span><span class="fl">11</span><span class="op">]</span>,<span class="fl">2</span>,<span class="va">mean</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">pairs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/expand.grid.html" class="external-link">expand.grid</a></span><span class="op">(</span>i<span class="op">=</span><span class="fl">1</span><span class="op">:</span><span class="fl">8</span>,j<span class="op">=</span><span class="fl">1</span><span class="op">:</span><span class="fl">8</span>,prob<span class="op">=</span><span class="fl">0</span><span class="op">)</span></span>
-<span><span class="va">pairs</span> <span class="op">&lt;-</span> <span class="va">pairs</span><span class="op">[</span><span class="va">pairs</span><span class="op">$</span><span class="va">i</span> <span class="op">&lt;</span> <span class="va">pairs</span><span class="op">$</span><span class="va">j</span>,<span class="op">]</span></span>
-<span><span class="va">pairs</span><span class="op">$</span><span class="va">prob</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">pairs</span>,<span class="fl">1</span>,<span class="kw">function</span><span class="op">(</span><span class="va">pair</span><span class="op">)</span><span class="op">{</span></span>
-<span>  <span class="va">i</span> <span class="op">&lt;-</span> <span class="va">pair</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>; <span class="va">j</span> <span class="op">&lt;-</span> <span class="va">pair</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span><span class="op">(</span><span class="va">resRCBTL</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"G"</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">i</span>,<span class="va">j</span><span class="op">)</span><span class="op">)</span><span class="op">]</span>,<span class="fl">1</span>,<span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">{</span><span class="va">x</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">==</span><span class="va">x</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span><span class="op">}</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="op">}</span><span class="op">)</span></span>
-<span><span class="va">pairs2</span> <span class="op">&lt;-</span> <span class="va">pairs</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">1</span>,<span class="fl">3</span><span class="op">)</span><span class="op">]</span>; <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">pairs2</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"i"</span>,<span class="st">"j"</span>,<span class="st">"prob"</span><span class="op">)</span></span>
-<span><span class="va">pairs3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>i<span class="op">=</span><span class="fl">1</span><span class="op">:</span><span class="fl">8</span>,j<span class="op">=</span><span class="fl">1</span><span class="op">:</span><span class="fl">8</span>,prob<span class="op">=</span><span class="fl">1</span><span class="op">)</span></span>
-<span><span class="va">pairs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">pairs</span>,<span class="va">pairs2</span>,<span class="va">pairs3</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">pairs</span>,<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">i</span>,levels<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/rev.html" class="external-link">rev</a></span><span class="op">(</span><span class="va">order_omega</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>                 y<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">j</span>,levels<span class="op">=</span><span class="va">order_omega</span><span class="op">)</span>,fill<span class="op">=</span><span class="va">prob</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_tile.html" class="external-link">geom_tile</a></span><span class="op">(</span><span class="op">)</span><span class="op">+</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_gradient.html" class="external-link">scale_fill_gradient</a></span><span class="op">(</span>low<span class="op">=</span><span class="st">"white"</span>,high<span class="op">=</span><span class="st">"black"</span>,breaks<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">.5</span>,<span class="fl">1</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span><span class="op">+</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>x<span class="op">=</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span>,y<span class="op">=</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span>,fill<span class="op">=</span><span class="st">"Probability"</span>,</span>
-<span>                  title<span class="op">=</span><span class="st">"Rank-Clustering Posterior Probabilities"</span><span class="op">)</span><span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.8</span>,<span class="fl">.9</span><span class="op">)</span>,legend.direction <span class="op">=</span> <span class="st">"horizontal"</span>,</span>
-<span>        axis.text.x <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>angle <span class="op">=</span> <span class="fl">90</span>, vjust <span class="op">=</span> <span class="fl">0.5</span>, hjust<span class="op">=</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/cluster_ggplots.html">cluster_ggplots</a></span><span class="op">(</span>mcmc <span class="op">=</span> <span class="va">resRCBTL</span>,object_names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"Ojbect "</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">6</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>title<span class="op">=</span><span class="st">"Rank-Clustering Posterior Probabilities"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="tutorial_files/figure-html/unnamed-chunk-8-1.png" width="700"></p>
-<p>Based on the above figure, we see that Objects 6 and 7 are
-rank-clustered with high posterior probability, as are objects 3, 4, and
-5. Objects 8, 2, and 1 are in singleton clusters. This result precisely
-aligns with the true rank-clustering of objects based on the <span class="math inline">\(\omega\)</span> that generated the rankings.</p>
+<p>Based on the above figure, we see that Objects 2 and 3 are
+rank-clustered with high posterior probability, as are objects 4 and 5.
+Objects 1 and 6 are in singleton clusters. This result precisely aligns
+with the true rank-clustering of objects based on the <span class="math inline">\(\omega\)</span> that generated the rankings.</p>
 </div>
   </div>
 
