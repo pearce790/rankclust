@@ -27,7 +27,7 @@ devtools::install_github("pearce790/rankclust")
 
 After installation, load the package with the following code:
 ```{r echo=FALSE,results='hide',message=FALSE,warning=FALSE}
-devtools::install_github("pearce790/rankrate")
+devtools::install_github("pearce790/rankclust")
 ```
 ```{r}
 library(rankclust)

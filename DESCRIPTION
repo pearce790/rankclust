@@ -17,12 +17,13 @@ Imports:
     magrittr,
     matrixStats,
     dplyr,
-    devtools
+    ggplot2,
+    reshape2
 Suggests: 
     tidyverse,
     gridExtra,
-    reshape2,
     knitr,
-    rmarkdown
+    rmarkdown,
+    devtools
 VignetteBuilder: knitr
 URL: https://pearce790.github.io/rankclust/

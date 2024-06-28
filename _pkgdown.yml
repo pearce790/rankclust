@@ -33,6 +33,12 @@ reference:
   contents:
   - mcmc_BTL
   - mcmc_RCBTL
+- title: Model Assessment and Results Visualization Function
+  desc: Functions to visualize convergence/mixing of MCMC chains and parameter posteriors.
+  contents:
+  - trace_ggplots
+  - posterior_ggplots
+  - cluster_ggplots
 - title: Helper Functions
   desc: Functions used during model-fitting that are not needed by the user, but are
     provided for completeness and reproducibility.
