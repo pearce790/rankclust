@@ -7,7 +7,7 @@
 dBTL(Pi, omega, log = FALSE, groupwise = FALSE)
 }
 \arguments{
-\item{Pi}{A matrix of rankings, such that the (i,j) entry is the index of the jth-most preferred object according to judge i. If \code{groupwise=TRUE}, then the index corresponds to the jth-most preferred object among those in row i; if \code{groupwise=FALSE}, it is assumd that all unranked objects (if any) are less preferred than those which are ranked.}
+\item{Pi}{A matrix of preference orderings ("rankings"), such that the (i,j) entry is the index of the jth-most preferred object according to judge i. If \code{groupwise=TRUE}, then the index corresponds to the jth-most preferred object among those in row i; if \code{groupwise=FALSE}, it is assumed that all unranked objects (if any) are less preferred than those which are ranked.}
 
 \item{omega}{A vector of non-negative object worth parameters.}
 

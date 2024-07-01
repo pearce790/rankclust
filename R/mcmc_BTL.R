@@ -6,7 +6,7 @@
 #' @importFrom dplyr select
 #' @import utils
 #'
-#' @param Pi A matrix of rankings, such that the (i,j) entry is the index of the jth-most preferred object according to judge i. If \code{groupwise=TRUE}, then the index corresponds to the jth-most preferred object among those in row i; if \code{groupwise=FALSE}, it is assumd that all unranked objects (if any) are less preferred than those which are ranked.
+#' @param Pi A matrix of preference orderings ("rankings"), such that the (i,j) entry is the index of the jth-most preferred object according to judge i. If \code{groupwise=TRUE}, then the index corresponds to the jth-most preferred object among those in row i; if \code{groupwise=FALSE}, it is assumed that all unranked objects (if any) are less preferred than those which are ranked.
 #' @param J A numeric indicating the total number of objects being compared.
 #' @param a_gamma A numeric for the first hyperparameter (shape) in a Gamma prior on each worth parameter.
 #' @param b_gamma A numeric for the second hyperparameter (rate) in a Gamma prior on each worth parameter.

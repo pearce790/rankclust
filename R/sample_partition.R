@@ -2,7 +2,7 @@
 #'
 #' This function implements a reversible jump MCMC procedure for updating the parameter partition in Bayesian Rank-Clustered BTL models. For internal use only.
 #'
-#' @param Pi A matrix of rankings, such that the (i,j) entry is the index of the jth-most preferred object according to judge i. If \code{groupwise=TRUE}, then the index corresponds to the jth-most preferred object among those in row i; if \code{groupwise=FALSE}, it is assumd that all unranked objects (if any) are less preferred than those which are ranked.
+#' @param Pi A matrix of preference orderings ("rankings"), such that the (i,j) entry is the index of the jth-most preferred object according to judge i. If \code{groupwise=TRUE}, then the index corresponds to the jth-most preferred object among those in row i; if \code{groupwise=FALSE}, it is assumed that all unranked objects (if any) are less preferred than those which are ranked.
 #' @param I A numeric indicating the number of rows in Pi
 #' @param J A numeric indicating the total number of objects being compared.
 #' @param nu A vector indicating current values for nu in the Gibbs sampler.

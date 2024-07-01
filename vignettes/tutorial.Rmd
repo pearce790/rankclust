@@ -42,7 +42,7 @@ Let's visualize our observed rankings, $\Pi$:
 ```{r}
 ggplot(melt(Pi),aes(x=value,fill=factor(Var2)))+
   geom_bar(color="black")+theme_bw()+
-  scale_fill_manual(values=c("#F7FCF5","#E5F5E0","#A1D99B","#74C476","#238B45","#006D2C","#00441B","gray15"))+
+  scale_fill_manual(values=c("#F7FCF5","#E5F5E0","#A1D99B","#74C476","#238B45","#006D2C"))+
   scale_x_continuous(breaks=1:10)+
   labs(x="Object",fill="Rank Place",title="Observed Ranks by Object")
 ```
@@ -54,17 +54,18 @@ We can see in the above stacked barchart that object 1 receives the most first-p
 Let's now fit a standard BTL model to the observed rankings. We place an independent Gamma($a_\gamma=3,b_\gamma=2$) prior on each worth parameter, $\omega_j$. Note that we are running 2 chains of 1000 iterations, remove the first half as burn-in, and perform no thinning. All posterior samples of $\omega$ are normalized post-hoc to sum to 1 (by default; can be changed using the `normalize_omega` argument).
 
 ```{r}
-resBTL <- mcmc_BTL(Pi=Pi,J=6,a_gamma=3,b_gamma=2,num_iters=1000,chains=2,burn_prop = 0.5, thin = 1,seed = 1)
+resBTL <- mcmc_BTL(Pi=Pi,J=6,a_gamma=3,b_gamma=2,
+                   num_iters=1000,chains=2,burn_prop = 0.5, thin = 1,seed = 1)
 head(resBTL)
 ```
 
 Next, we'll view trace plots created by the package's `trace_ggplots` function (to assess convergence and mixing) and posterior violin plots of the object-specific worth parameters created by the package's `posterior_ggplots` function.
 
 ```{r}
-traceplots <- trace_ggplots(mcmc = resBTL,object_names = paste0("Ojbect ",1:6))
+traceplots <- trace_ggplots(mcmc = resBTL,object_names = paste0("Object ",1:6))
 traceplots$traceOmega+
   labs(title="Trace Plots: Standard BTL")
-posterior_ggplots(mcmc = resBTL,object_names = paste0("Ojbect ",1:6))+
+posterior_ggplots(mcmc = resBTL,object_names = paste0("Object ",1:6))+
   labs(title="Posterior Violin Plots: Standard BTL")
 ```
 
@@ -84,19 +85,19 @@ head(resRCBTL)
 Next, we'll view trace plots created by the package's `trace_ggplots` function (to assess convergence and mixing) and posterior violin plots of the object-specific worth parameters created by the package's `posterior_ggplots` function.
 
 ```{r}
-traceplotsRCBTL <- trace_ggplots(mcmc=resRCBTL,object_names = paste0("Ojbect ",1:6))
+traceplotsRCBTL <- trace_ggplots(mcmc=resRCBTL,object_names = paste0("Object ",1:6))
 traceplotsRCBTL$traceK+
   labs(title="Trace Plot of K: Rank-Clustered BTL")
 traceplotsRCBTL$traceOmega+
   labs(title="Trace Plots of Omega: Standard BTL")
-posterior_ggplots(mcmc = resRCBTL,object_names = paste0("Ojbect ",1:6))+
+posterior_ggplots(mcmc = resRCBTL,object_names = paste0("Object ",1:6))+
   labs(title="Posterior Violin Plots: Rank-Clustered BTL")
 ```
 
 Just as before, we can see that Object 1 is most preferred, followed by objects 2 and 3 (similarly preferred between them), followed by objects 4 and 5 (similarly preferred between them), and followed by object 6 in last. How "similar" are these groups objects preferred? We can see this by examining a posterior clustering matrix, as created by the package's `cluster_ggplots` function:
 
 ```{r}
-cluster_ggplots(mcmc = resRCBTL,object_names = paste0("Ojbect ",1:6))+
+cluster_ggplots(mcmc = resRCBTL,object_names = paste0("Object ",1:6))+
   labs(title="Rank-Clustering Posterior Probabilities")
 ```
 
