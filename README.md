@@ -7,11 +7,7 @@ The ``rankclust`` R package implements the the Rank-Clustered Bradley-Terry-Luce
 Where can I learn more? 
 -----
 
-<<<<<<< HEAD
-To learn more about the novel rank-clustering methodology implemented in this package, check out our [arXiv preprint](https://pearce790.github.io/)!
-=======
 To learn more about the novel rank-clustering methodology implemented in this package, check out our [arXiv preprint](https://arxiv.org/abs/2406.19563)!
->>>>>>> 7d85142 (add arxiv link)
 
 For information on how to download the `rankclust` package from Github, see the [Overview](https://pearce790.github.io/rankclust/articles/overview.html) tab. After, check out the [Tutorial](https://pearce790.github.io/rankclust/articles/tutorial.html) and [Reference](https://pearce790.github.io/rankclust/reference/index.html) tabs for details on the package's use.
 
