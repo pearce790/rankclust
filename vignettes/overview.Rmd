@@ -14,9 +14,9 @@ knitr::opts_chunk$set(
 )
 ```
 
-This package implements the Rank-Clustered Bradley-Terry-Luce model proposed by Pearce and Erosheva (2024+). More specifically, it fits a Bayesian model for ordinal comparison data of many different types (such as complete or partial rankings, pairwise comparisons, etc.) such that some objects being ranked may be "rank-clustered", i.e., assigned equal rank in the overall ranking.
+This package implements the Rank-Clustered Bradley-Terry-Luce model proposed by [Pearce and Erosheva (2024+)](https://pearce790.github.io/). More specifically, it fits a Bayesian model for ordinal comparison data of many different types (such as complete or partial rankings, pairwise comparisons, etc.) such that some objects being ranked may be "rank-clustered", i.e., assigned equal rank in the overall ranking.
 
-For more details on how to use this package, see the [tutorial](https://pearce790.github.io/rankclust/articles/tutorial.html). 
+For more details on how to use this package, see the [Tutorial](https://pearce790.github.io/rankclust/articles/tutorial.html) and [Reference](https://pearce790.github.io/rankclust/reference/index.html) pages on this website. 
 
 The package is currently in beta testing. You may install the package from Github using the following code:
 ```{r, eval=FALSE}
