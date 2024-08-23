@@ -27,6 +27,7 @@ reference:
   - dBTL
   - rBTL
   - rRCBTL
+  - posterior_density
 - title: Model Estimation Functions
   desc: Functions that allow for estimation of Bayesian BTL or Rank-Clustered BTL
     models.
