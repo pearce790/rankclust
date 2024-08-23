@@ -3,7 +3,7 @@
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]--></head><body data-spy="scroll" data-target="#toc">
-    
+
 
     <div class="container template-reference-topic">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -35,13 +35,13 @@
   </div><!--/.container -->
 </div><!--/.navbar -->
 
-      
+
 
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Calculation of constants for Gibbs sampling of worth parameters via data augmentation (internal use only)</h1>
-    
+
     <div class="hidden name"><code>obtain_constants.Rd</code></div>
     </div>
 
@@ -55,27 +55,27 @@
 
     <div id="arguments">
     <h2>Arguments</h2>
-    <dl><dt>Pi</dt>
+
+
+<dl><dt id="arg-pi">Pi<a class="anchor" aria-label="anchor" href="#arg-pi"></a></dt>
 <dd><p>A matrix of preference orderings ("rankings"), such that the (i,j) entry is the index of the jth-most preferred object according to judge i. If <code>groupwise=TRUE</code>, then the index corresponds to the jth-most preferred object among those in row i; if <code>groupwise=FALSE</code>, it is assumed that all unranked objects (if any) are less preferred than those which are ranked.</p></dd>
 
 
-<dt>I</dt>
+<dt id="arg-i">I<a class="anchor" aria-label="anchor" href="#arg-i"></a></dt>
 <dd><p>A numeric indicating the number of rows in Pi</p></dd>
 
 
-<dt>J</dt>
+<dt id="arg-j">J<a class="anchor" aria-label="anchor" href="#arg-j"></a></dt>
 <dd><p>A numeric indicating the total number of objects being compared.</p></dd>
 
 
-<dt>groupwise</dt>
+<dt id="arg-groupwise">groupwise<a class="anchor" aria-label="anchor" href="#arg-groupwise"></a></dt>
 <dd><p>A boolean to indicate whether the observed rankings are complete/partial rankings (<code>FALSE</code>; default) or groupwise comparisons (<code>TRUE</code>).</p></dd>
 
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    
-
-<p>A list containing calculated constants c_k0 and delta_irk0.</p>
+    <p>A list containing calculated constants c_k0 and delta_irk0.</p>
     </div>
 
   </div>
@@ -90,15 +90,15 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
 </div>
 
       </footer></div>
 
-  
 
 
-  
+
+
 
   </body></html>
 

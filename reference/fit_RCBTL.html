@@ -3,7 +3,7 @@
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]--></head><body data-spy="scroll" data-target="#toc">
-    
+
 
     <div class="container template-reference-topic">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -35,13 +35,13 @@
   </div><!--/.container -->
 </div><!--/.navbar -->
 
-      
+
 
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Fit a Bayesian Rank-Clustered BTL model to ordinal comparison data (recommended for internal use only; use mcmc_RCBTL function instead)</h1>
-    
+
     <div class="hidden name"><code>fit_RCBTL.Rd</code></div>
     </div>
 
@@ -65,47 +65,47 @@
 
     <div id="arguments">
     <h2>Arguments</h2>
-    <dl><dt>Pi</dt>
+
+
+<dl><dt id="arg-pi">Pi<a class="anchor" aria-label="anchor" href="#arg-pi"></a></dt>
 <dd><p>A matrix of preference orderings ("rankings"), such that the (i,j) entry is the index of the jth-most preferred object according to judge i. If <code>groupwise=TRUE</code>, then the index corresponds to the jth-most preferred object among those in row i; if <code>groupwise=FALSE</code>, it is assumed that all unranked objects (if any) are less preferred than those which are ranked.</p></dd>
 
 
-<dt>J</dt>
+<dt id="arg-j">J<a class="anchor" aria-label="anchor" href="#arg-j"></a></dt>
 <dd><p>A numeric indicating the total number of objects being compared.</p></dd>
 
 
-<dt>a_gamma</dt>
+<dt id="arg-a-gamma">a_gamma<a class="anchor" aria-label="anchor" href="#arg-a-gamma"></a></dt>
 <dd><p>A numeric for the first hyperparameter (shape) in a Gamma prior on each worth parameter.</p></dd>
 
 
-<dt>b_gamma</dt>
+<dt id="arg-b-gamma">b_gamma<a class="anchor" aria-label="anchor" href="#arg-b-gamma"></a></dt>
 <dd><p>A numeric for the second hyperparameter (rate) in a Gamma prior on each worth parameter.</p></dd>
 
 
-<dt>lambda</dt>
+<dt id="arg-lambda">lambda<a class="anchor" aria-label="anchor" href="#arg-lambda"></a></dt>
 <dd><p>A numeric for the Poisson hyperparameter on the number of non-empty clusters in the partition of worth parameters.</p></dd>
 
 
-<dt>nu0</dt>
+<dt id="arg-nu-">nu0<a class="anchor" aria-label="anchor" href="#arg-nu-"></a></dt>
 <dd><p>A numeric vector for the initialization of worth parameters, omega, in the MCMC algorithm. Default to <code>NULL</code>, indicating random initialization.</p></dd>
 
 
-<dt>num_iters</dt>
+<dt id="arg-num-iters">num_iters<a class="anchor" aria-label="anchor" href="#arg-num-iters"></a></dt>
 <dd><p>A numeric indicating the total number of outer MCMC iterations (i.e., the number of times the partition is updated in the Gibbs sampler).</p></dd>
 
 
-<dt>nu_reps</dt>
+<dt id="arg-nu-reps">nu_reps<a class="anchor" aria-label="anchor" href="#arg-nu-reps"></a></dt>
 <dd><p>A numeric indicating the number of times each worth parameter is drawn per update of the parameter partition. There will be a total of <code>num_iters</code>x<code>nu_reps</code> samples from the posterior.</p></dd>
 
 
-<dt>groupwise</dt>
+<dt id="arg-groupwise">groupwise<a class="anchor" aria-label="anchor" href="#arg-groupwise"></a></dt>
 <dd><p>A boolean to indicate whether the observed rankings are complete/partial rankings (<code>FALSE</code>; default) or groupwise comparisons (<code>TRUE</code>).</p></dd>
 
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    
-
-<p>A list of 4 elements: <code>omega</code>, a (<code>num_iters</code>x<code>nu_reps</code>)x<code>J</code> matrix of approximate posterior draws of the object-specific worth parameters, omega; <code>nu</code> a (<code>num_iters</code>x<code>nu_reps</code>)x<code>J</code> matrix of the unique parameter values corresponding to the jth partition cluster in posterior draw i, <code>g</code> a a (<code>num_iters</code>x<code>nu_reps</code>)x<code>J</code> matrix indicating the cluster membership of object j in posterior draw i, and <code>K</code> a vector of the number of non-empty partition clusters in each posterior draw.</p>
+    <p>A list of 4 elements: <code>omega</code>, a (<code>num_iters</code>x<code>nu_reps</code>)x<code>J</code> matrix of approximate posterior draws of the object-specific worth parameters, omega; <code>nu</code> a (<code>num_iters</code>x<code>nu_reps</code>)x<code>J</code> matrix of the unique parameter values corresponding to the jth partition cluster in posterior draw i, <code>g</code> a a (<code>num_iters</code>x<code>nu_reps</code>)x<code>J</code> matrix indicating the cluster membership of object j in posterior draw i, and <code>K</code> a vector of the number of non-empty partition clusters in each posterior draw.</p>
     </div>
 
     <div id="ref-examples">
@@ -168,15 +168,15 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
 </div>
 
       </footer></div>
 
-  
 
 
-  
+
+
 
   </body></html>
 
